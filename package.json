@@ -7,8 +7,9 @@
     "src/**/*"
   ],
   "scripts": {
+    "tsc":"npx --package typescript tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "pub": "git add * && git commit -m\"1st commit\" && git push origin master && npm version patch && npm publish"
+    "pub": "npx --package typescript tsc && git add * && git commit -m\"1st commit\" && git push origin master && npm version patch && npm publish"
   },
   "author": "",
   "license": "ISC",

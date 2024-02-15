@@ -2,7 +2,7 @@ import * as nats from "node-nats-streaming";
 import { Stan } from "node-nats-streaming";
 export function WrapperInstance(clusterId:string,clientId:string,url:string){
 class Wrapper {
-    private _client:Stan;
+    private _client: Stan|null =null;
     constructor(private clusterId:string,private clientId:string,private url:string){};
     get client(){
         if(!this._client){

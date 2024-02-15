@@ -25,16 +25,20 @@ export abstract class listener<T extends m> {
             .setDurableName(this.queueGroupName);
     }
     listen(){
+        const self=this;
         const subscribtion=this.client.subscribe(this.channelName,this.queueGroupName,this.options());
         subscribtion.on('mesage',function(msg:Message){
-            const data=this.parseMessage(msg) as T['data'];
-            this.onEvent(data,msg);
+            const data=self.parseMessage(msg);
+            self.onEvent(data,msg);
         });
     };
-    parseMessage(msg:Message){
+    parseMessage(msg:Message):T['data']{
         const data=msg.getData();
-        if( typeof data==='string' ){
+        if( typeof data === 'string' ){
             return JSON.parse(data);
+        }
+        else {
+            return data.toString('utf8');
         };
     };
     abstract onEvent( data:T['data'] , msg:Message ):void;
