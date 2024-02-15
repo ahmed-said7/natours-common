@@ -18,7 +18,7 @@ declare global{
     }
 }
 
-interface payload extends JwtPayload {
+export interface payload extends JwtPayload {
     _id: string;
     email: string;
     password: string;

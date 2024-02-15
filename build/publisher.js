@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.listener = void 0;
+exports.publisher = void 0;
 ;
-class listener {
+class publisher {
     constructor(_client) {
         this._client = _client;
     }
     ;
-    listen(data) {
+    publish(data) {
         return new Promise((resolve, reject) => {
             this._client.publish(this.channelName, JSON.stringify(data), function (err) {
                 if (err) {
@@ -20,5 +20,5 @@ class listener {
     }
     ;
 }
-exports.listener = listener;
+exports.publisher = publisher;
 ;

@@ -1,9 +1,9 @@
 import mongoose, {Model,Query} from "mongoose";
-interface Pobulate {
+export interface Pobulate {
     path: string;
     select: string;
 };
-interface t {
+export interface t {
     page?:string;
     sort?:string;
     select?:string;

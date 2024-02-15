@@ -1,13 +1,13 @@
 import {Stan,Message} from "node-nats-streaming";
 import { subjectType } from "./enums";
 
-interface m {
+export interface l {
     subject:subjectType;
     data: any;
 };
 
 
-export abstract class listener<T extends m> {
+export abstract class listener<T extends l> {
     abstract queueGroupName:string;
     abstract channelName:T['subject'];
     constructor(private _client:Stan){};

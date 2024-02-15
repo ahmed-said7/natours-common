@@ -1,14 +1,13 @@
 import { Query } from "mongoose";
 import {} from "mongoose";
-interface t {
+export interface g {
     page?:string;
     sort?:string;
     select?:string;
     limit?:string;
     keyword?:string;
 };
-type Element=keyof t;
-interface Pagination {
+export interface Pagination {
     currentPage?:number;
     previousPage?:number;
     nextPage?:number;
@@ -17,7 +16,7 @@ interface Pagination {
     limit?:number;
 };
 
-export class apiFeatures< T , m extends t > {
+export class apiFeatures< T , m extends g > {
     public paginationObj:Pagination={};
     constructor( public query:Query< T[] , T > , public queryObj:m ){};
     filter(obj={}){

@@ -1,15 +1,15 @@
 import {Stan} from "node-nats-streaming";
 import { subjectType } from "./enums";
 
-interface m {
+export interface s {
     subject:subjectType;
     data: any;
 };
 
-export abstract class listener<T extends m> {
+export abstract class publisher<T extends s> {
     abstract channelName:subjectType;
     constructor(private _client:Stan){};
-    listen(data:T['data']){
+    publish(data:T['data']){
         return new Promise<void>( (resolve, reject) => {
             this._client.publish(this.channelName,JSON.stringify(data),function(err){
                 if(err){
