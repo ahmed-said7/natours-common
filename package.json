@@ -1,6 +1,6 @@
 {
   "name": "@natour/common",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "",
   "types": "./build/index.d.ts",
   "main": "./build/index.js",
