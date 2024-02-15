@@ -6,7 +6,7 @@ import {errorHandler} from "./errorHandler";
 import {createTransport} from "./nodemailer";
 import {validationHandler} from "./validationHandler";
 
-module.exports={
+export {
     apiError,apiFactory,apiFeatures,protect,
     allowedTo,errorHandler
     ,createTransport,validationHandler
