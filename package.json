@@ -1,5 +1,5 @@
 {
-  "name": "@func1/common",
+  "name": "@natour/common",
   "version": "1.0.1",
   "description": "",
   "main": "./src/index.ts",
