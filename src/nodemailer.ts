@@ -25,4 +25,7 @@ export abstract class createTransport {
         }
         );
     };
+    options(subject:string,text:string):Options{
+        return { text,subject,to:this.user.email,from:"natours" };
+    };
 };
