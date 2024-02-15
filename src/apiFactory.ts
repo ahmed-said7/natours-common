@@ -11,9 +11,6 @@ interface t {
     keyword?:string;
 };
 
-interface params {
-    id:mongoose.Types.ObjectId;
-};
 
 import { Request , Response , NextFunction } from "express";
 import { apiError } from "./apiError";
