@@ -1,10 +1,10 @@
-export {apiError} from "./apiError";
-export {apiFactory} from "./apiFactory";
-export {apiFeatures} from "./apiFeatures";
-export {protect,allowedTo} from "./auth";
-export {errorHandler} from "./errorHandler";
-export {createTransport} from "./nodemailer";
-export {validationHandler} from "./validationHandler";
+export * from "./apiError";
+export * from "./apiFactory";
+export * from "./apiFeatures";
+export * from "./auth";
+export * from "./errorHandler";
+export * from "./nodemailer";
+export * from "./validationHandler";
 // export {
 //     apiError,apiFactory,apiFeatures,protect,
 //     allowedTo,errorHandler
