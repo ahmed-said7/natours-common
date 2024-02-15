@@ -1,13 +1,13 @@
 {
   "name": "@natour/common",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "",
   "main": "./src/index.ts",
   "files": [
     "src/**/*"
   ],
   "scripts": {
-    "tsc":"npx --package typescript tsc",
+    "tsc": "npx --package typescript tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "pub": "npx --package typescript tsc && git add * && git commit -m\"1st commit\" && git push origin master && npm version patch && npm publish"
   },
