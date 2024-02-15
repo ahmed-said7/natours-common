@@ -25,7 +25,8 @@ export abstract class createTransport {
         }
         );
     };
-    options(subject:string,text:string):Options{
-        return { text,subject,to:this.user.email,from:"natours" };
+    options(subject:string,text:string){
+        const opts= { text,subject,to:this.user.email,from:"natours" };
+        return this.transport().sendMail(opts);
     };
 };
