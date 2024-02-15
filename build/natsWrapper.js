@@ -27,10 +27,7 @@ exports.WrapperInstance = void 0;
 const nats = __importStar(require("node-nats-streaming"));
 function WrapperInstance(clusterId, clientId, url) {
     class Wrapper {
-        constructor(clusterId, clientId, url) {
-            this.clusterId = clusterId;
-            this.clientId = clientId;
-            this.url = url;
+        constructor() {
             this._client = null;
         }
         ;
@@ -42,8 +39,8 @@ function WrapperInstance(clusterId, clientId, url) {
             return this._client;
         }
         ;
-        connect() {
-            this._client = nats.connect(this.clusterId, this.clientId, { url: this.url });
+        connect(clusterId, clientId, url) {
+            this._client = nats.connect(clusterId, clientId, { url });
             return new Promise((resolve, reject) => {
                 this.client.on('error', err => reject(err));
                 this.client.on('connect', () => resolve());
@@ -51,7 +48,8 @@ function WrapperInstance(clusterId, clientId, url) {
         }
         ;
         static Instance(clusterId, clientId, url) {
-            return new Wrapper(clusterId, clientId, url);
+            const WrapperModel = new Wrapper().connect(clusterId, clientId, url);
+            return WrapperModel;
         }
         ;
     }
