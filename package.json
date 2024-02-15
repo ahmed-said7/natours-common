@@ -2,9 +2,9 @@
   "name": "@natour/common",
   "version": "1.0.15",
   "description": "",
-  "main": "./src/index.ts",
+  "main": "./build/index.js",
   "files": [
-    "src/**/*"
+    "build/**/*"
   ],
   "scripts": {
     "tsc": "npx --package typescript tsc",
