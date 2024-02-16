@@ -10,5 +10,8 @@ var subjectType;
     subjectType["reviewUpdated"] = "review:updated";
     subjectType["reviewDeleted"] = "review:deleted";
     subjectType["bookingCreated"] = "booking:created";
+    subjectType["userCreated"] = "user:created";
+    subjectType["userUpdated"] = "user:updated";
+    subjectType["userDeleted"] = "user:deleted";
 })(subjectType || (exports.subjectType = subjectType = {}));
 ;

@@ -27,7 +27,7 @@ const handleValidationError = ( err : mongoose.Error.ValidationError ) : apiErro
 
 const sendErrorProd=( err: apiError | any , res:Response )=>{
     if( err.isOperational ){
-        res.status(err.statusCode)
+        res.status(err.statusCode || 400 )
         .json({ mesage:err.message , status:err.status });
     } else {
         res.status(500)
@@ -36,26 +36,27 @@ const sendErrorProd=( err: apiError | any , res:Response )=>{
 };
 
 const sendErrorDev=( err: erType , res:Response )=>{
-    return res.status(200) .
-    json({ err : err })
+    return res.status(400).json({ err : err })
 };
 
 
+export enum environment {
+    development = 'development',
+    production="production"
+};
 
-
-export const errorHandler=function( error:erType,req:Request,res:Response,next:NextFunction ){
-        console.log(error);
-        if( process.env.node_env === 'development'){
+export const errorHandler=(env:environment) => function( error:erType,req:Request,res:Response,next:NextFunction ){
+        if( env === 'development'){
             return sendErrorDev(error, res);
         }
         let objErr={ ... error };
-        if( (objErr as CastError ).name == 'CastError' ){
+        if( (objErr as CastError ).name === 'CastError' ){
             objErr=new apiError(`invalid mongoId value ${(error as CastError).value}`,400);
         };
-        if( (objErr as MongoError).code == 11000 && (objErr as MongoError).name == 'MongoError' ){
+        if( (objErr as MongoError).code === 11000  ){
             objErr=handleDuplicateError( error as MongoError );
         };
-        if( (objErr as mongoose.Error.ValidationError ).name == 'ValidationError'){
+        if( (objErr as mongoose.Error.ValidationError ).name === 'ValidationError'){
             objErr=handleValidationError( error as mongoose.Error.ValidationError );
         };
         sendErrorProd(objErr , res);

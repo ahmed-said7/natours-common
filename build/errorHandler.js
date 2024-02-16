@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.errorHandler = void 0;
+exports.errorHandler = exports.environment = void 0;
 const apiError_1 = require("./apiError");
 ;
 const handleDuplicateError = (err) => {
@@ -13,7 +13,7 @@ const handleValidationError = (err) => {
 };
 const sendErrorProd = (err, res) => {
     if (err.isOperational) {
-        res.status(err.statusCode)
+        res.status(err.statusCode || 400)
             .json({ mesage: err.message, status: err.status });
     }
     else {
@@ -23,24 +23,28 @@ const sendErrorProd = (err, res) => {
     ;
 };
 const sendErrorDev = (err, res) => {
-    return res.status(200).
-        json({ err: err });
+    return res.status(400).json({ err: err });
 };
-const errorHandler = function (error, req, res, next) {
-    console.log(error);
-    if (process.env.node_env === 'development') {
+var environment;
+(function (environment) {
+    environment["development"] = "development";
+    environment["production"] = "production";
+})(environment || (exports.environment = environment = {}));
+;
+const errorHandler = (env) => function (error, req, res, next) {
+    if (env === 'development') {
         return sendErrorDev(error, res);
     }
     let objErr = Object.assign({}, error);
-    if (objErr.name == 'CastError') {
+    if (objErr.name === 'CastError') {
         objErr = new apiError_1.apiError(`invalid mongoId value ${error.value}`, 400);
     }
     ;
-    if (objErr.code == 11000 && objErr.name == 'MongoError') {
+    if (objErr.code === 11000) {
         objErr = handleDuplicateError(error);
     }
     ;
-    if (objErr.name == 'ValidationError') {
+    if (objErr.name === 'ValidationError') {
         objErr = handleValidationError(error);
     }
     ;

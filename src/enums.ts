@@ -5,5 +5,8 @@ export enum subjectType {
     reviewCreated="review:created",
     reviewUpdated="review:updated",
     reviewDeleted="review:deleted",
-    bookingCreated="booking:created"
+    bookingCreated="booking:created",
+    userCreated="user:created",
+    userUpdated="user:updated",
+    userDeleted="user:deleted"
 };

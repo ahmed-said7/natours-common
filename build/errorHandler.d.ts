@@ -35,6 +35,10 @@ interface MongoError {
     index?: string;
 }
 type erType = CastError | apiError | mongoose.Error.ValidationError | MongoError | any;
-export declare const errorHandler: (error: erType, req: Request, res: Response, next: NextFunction) => Response<any, Record<string, any>> | undefined;
+export declare enum environment {
+    development = "development",
+    production = "production"
+}
+export declare const errorHandler: (env: environment) => (error: erType, req: Request, res: Response, next: NextFunction) => Response<any, Record<string, any>> | undefined;
 export {};
 //# sourceMappingURL=errorHandler.d.ts.map
