@@ -14,10 +14,13 @@ exports.apiFactory = void 0;
 ;
 const apiError_1 = require("./apiError");
 const apiFeatures_1 = require("./apiFeatures");
+;
 class apiFactory {
-    constructor(model, options) {
+    constructor(model, options, publish) {
         this.model = model;
         this.options = options;
+        this.publisherInstance = null;
+        this.publisherInstance = publish;
     }
     ;
     getOne(req, res, next) {
@@ -43,6 +46,10 @@ class apiFactory {
                 return next(new apiError_1.apiError('doc not found', 400));
             }
             ;
+            if (this.publisherInstance) {
+                this.publisherInstance.publish(data);
+            }
+            ;
             res.status(200).json({ data });
         });
     }
@@ -54,6 +61,10 @@ class apiFactory {
                 return next(new apiError_1.apiError('doc not found', 400));
             }
             ;
+            if (this.publisherInstance) {
+                this.publisherInstance.publish(data);
+            }
+            ;
             res.status(200).json({ data });
         });
     }
@@ -63,6 +74,10 @@ class apiFactory {
             let data = yield this.model.findByIdAndDelete(req.params.id);
             if (!data) {
                 return next(new apiError_1.apiError('doc not found', 400));
+            }
+            ;
+            if (this.publisherInstance) {
+                this.publisherInstance.publish(data);
             }
             ;
             res.status(200).json({ sttus: "Deleted" });

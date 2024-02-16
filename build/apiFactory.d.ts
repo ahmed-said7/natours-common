@@ -35,6 +35,7 @@ export interface t {
     keyword?: string;
 }
 import { Request, Response, NextFunction } from "express";
+import { subjectType } from "./enums";
 declare global {
     namespace Express {
         interface Request {
@@ -44,10 +45,15 @@ declare global {
         }
     }
 }
+export interface Publisher<d> {
+    publish(data: d): void;
+    channelName: subjectType;
+}
 export declare class apiFactory<T, m extends t> {
     model: Model<T>;
     options: Pobulate | null;
-    constructor(model: Model<T>, options: Pobulate | null);
+    private publisherInstance;
+    constructor(model: Model<T>, options: Pobulate | null, publish: Publisher<T> | null);
     getOne(req: Request<{
         id: string;
     }, {}, {}, {}>, res: Response, next: NextFunction): Promise<void>;

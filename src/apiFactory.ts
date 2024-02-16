@@ -15,6 +15,7 @@ export interface t {
 import { Request , Response , NextFunction } from "express";
 import { apiError } from "./apiError";
 import { apiFeatures } from "./apiFeatures";
+import { subjectType } from "./enums";
 
 declare global{
     namespace Express {
@@ -24,11 +25,18 @@ declare global{
     }
 }
 
-
+export interface Publisher<d> {
+    publish(data:d):void;
+    channelName:subjectType;
+};
 
 
 export class apiFactory <T,m extends t> {
-    constructor( public model:Model<T> , public options: Pobulate | null ){};
+    private publisherInstance: Publisher<T> | null =null;
+    constructor( public model:Model<T> , public options: Pobulate | null , publish: Publisher<T> | null ){
+        this.publisherInstance=publish;
+    };
+    
     async getOne(req:Request<{id:string},{},{},{}>,res:Response,next:NextFunction){
         let query=this.model.findOne({ _id:req.params.id }) as Query<T,T>;
         if ( this.options ) {
@@ -41,9 +49,12 @@ export class apiFactory <T,m extends t> {
         res.status(200).json({data});
     };
     async createOne(req:Request,res:Response,next:NextFunction){
-        let data=await this.model.create( req.body );
+        let data=await this.model.create( req.body ) as T;
         if(!data){
             return next(new apiError('doc not found',400));
+        };
+        if(this.publisherInstance){
+            this.publisherInstance.publish(data);
         };
         res.status(200).json({data});
     };
@@ -52,12 +63,18 @@ export class apiFactory <T,m extends t> {
         if(!data){
             return next(new apiError('doc not found',400));
         };
+        if(this.publisherInstance){
+            this.publisherInstance.publish(data);
+        };
         res.status(200).json({data});
     };
     async deleteOne(req:Request<{id:string},{},{},t>,res:Response,next:NextFunction){
         let data=await this.model.findByIdAndDelete(req.params.id);
         if(!data){
             return next(new apiError('doc not found',400));
+        };
+        if(this.publisherInstance){
+            this.publisherInstance.publish(data);
         };
         res.status(200).json({sttus:"Deleted"});
     };
