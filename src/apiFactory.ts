@@ -32,11 +32,16 @@ export interface Publisher<d> {
 
 
 export class apiFactory <T,m extends t,h> {
-    private publisherInstance: Publisher<h> | null =null;
-    constructor( public model:Model<T> , public options: Pobulate | null , publish: Publisher<h> | null ){
-        this.publisherInstance=publish;
-    };
+    private publisherCreated: Publisher<h> | undefined =undefined;
+    private publisherUpdated: Publisher<h> | undefined =undefined;
+    private publisherDeleted: Publisher<h> | undefined =undefined;
+    constructor( public model:Model<T> , public options?: Pobulate ){};
     
+    setPublisher( publisherCreated?: Publisher<h>,publisherUpdated?: Publisher<h>,publisherDeleted?: Publisher<h>){
+        this.publisherCreated=publisherCreated;
+        this.publisherUpdated=publisherUpdated;
+        this.publisherDeleted=publisherDeleted;
+    };
     async getOne(req:Request<{id:string},{},{},{}>,res:Response,next:NextFunction){
         let query=this.model.findOne({ _id:req.params.id }) as Query<T,T>;
         if ( this.options ) {
@@ -53,8 +58,8 @@ export class apiFactory <T,m extends t,h> {
         if(!data){
             return next(new apiError('doc not found',400));
         };
-        if(this.publisherInstance){
-            this.publisherInstance.publish(data);
+        if(this.publisherCreated){
+            this.publisherCreated.publish(data);
         };
         res.status(200).json({data});
     };
@@ -63,8 +68,8 @@ export class apiFactory <T,m extends t,h> {
         if(!data){
             return next(new apiError('doc not found',400));
         };
-        if(this.publisherInstance){
-            this.publisherInstance.publish(data);
+        if(this.publisherUpdated){
+            this.publisherUpdated.publish(data);
         };
         res.status(200).json({data});
     };
@@ -73,8 +78,8 @@ export class apiFactory <T,m extends t,h> {
         if(!data){
             return next(new apiError('doc not found',400));
         };
-        if(this.publisherInstance){
-            this.publisherInstance.publish(data) ;
+        if(this.publisherDeleted){
+            this.publisherDeleted.publish(data) ;
         };
         res.status(200).json({sttus:"Deleted"});
     };

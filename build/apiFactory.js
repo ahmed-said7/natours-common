@@ -16,11 +16,18 @@ const apiError_1 = require("./apiError");
 const apiFeatures_1 = require("./apiFeatures");
 ;
 class apiFactory {
-    constructor(model, options, publish) {
+    constructor(model, options) {
         this.model = model;
         this.options = options;
-        this.publisherInstance = null;
-        this.publisherInstance = publish;
+        this.publisherCreated = undefined;
+        this.publisherUpdated = undefined;
+        this.publisherDeleted = undefined;
+    }
+    ;
+    setPublisher(publisherCreated, publisherUpdated, publisherDeleted) {
+        this.publisherCreated = publisherCreated;
+        this.publisherUpdated = publisherUpdated;
+        this.publisherDeleted = publisherDeleted;
     }
     ;
     getOne(req, res, next) {
@@ -46,8 +53,8 @@ class apiFactory {
                 return next(new apiError_1.apiError('doc not found', 400));
             }
             ;
-            if (this.publisherInstance) {
-                this.publisherInstance.publish(data);
+            if (this.publisherCreated) {
+                this.publisherCreated.publish(data);
             }
             ;
             res.status(200).json({ data });
@@ -61,8 +68,8 @@ class apiFactory {
                 return next(new apiError_1.apiError('doc not found', 400));
             }
             ;
-            if (this.publisherInstance) {
-                this.publisherInstance.publish(data);
+            if (this.publisherUpdated) {
+                this.publisherUpdated.publish(data);
             }
             ;
             res.status(200).json({ data });
@@ -76,8 +83,8 @@ class apiFactory {
                 return next(new apiError_1.apiError('doc not found', 400));
             }
             ;
-            if (this.publisherInstance) {
-                this.publisherInstance.publish(data);
+            if (this.publisherDeleted) {
+                this.publisherDeleted.publish(data);
             }
             ;
             res.status(200).json({ sttus: "Deleted" });

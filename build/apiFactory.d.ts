@@ -51,9 +51,12 @@ export interface Publisher<d> {
 }
 export declare class apiFactory<T, m extends t, h> {
     model: Model<T>;
-    options: Pobulate | null;
-    private publisherInstance;
-    constructor(model: Model<T>, options: Pobulate | null, publish: Publisher<h> | null);
+    options?: Pobulate | undefined;
+    private publisherCreated;
+    private publisherUpdated;
+    private publisherDeleted;
+    constructor(model: Model<T>, options?: Pobulate | undefined);
+    setPublisher(publisherCreated?: Publisher<h>, publisherUpdated?: Publisher<h>, publisherDeleted?: Publisher<h>): void;
     getOne(req: Request<{
         id: string;
     }, {}, {}, {}>, res: Response, next: NextFunction): Promise<void>;
