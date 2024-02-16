@@ -15,6 +15,7 @@ exports.apiFactory = void 0;
 const apiError_1 = require("./apiError");
 const apiFeatures_1 = require("./apiFeatures");
 ;
+;
 class apiFactory {
     constructor(model, options) {
         this.model = model;
@@ -69,7 +70,8 @@ class apiFactory {
             }
             ;
             if (this.publisherUpdated) {
-                this.publisherUpdated.publish(data);
+                const emitted = Object.assign({ _id: data._id, version: data.version }, req.body);
+                yield this.publisherUpdated.publish(emitted);
             }
             ;
             res.status(200).json({ data });
@@ -78,13 +80,15 @@ class apiFactory {
     ;
     deleteOne(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            let data = yield this.model.findByIdAndDelete(req.params.id);
+            let data = yield this.model.findById(req.params.id);
             if (!data) {
                 return next(new apiError_1.apiError('doc not found', 400));
             }
             ;
+            yield data.deleteOne();
             if (this.publisherDeleted) {
-                this.publisherDeleted.publish(data);
+                const emitted = { _id: data._id, version: data.version };
+                yield this.publisherDeleted.publish(emitted);
             }
             ;
             res.status(200).json({ sttus: "Deleted" });

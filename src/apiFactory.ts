@@ -31,7 +31,15 @@ export interface Publisher<d> {
 };
 
 
-export class apiFactory <T,m extends t,h> {
+export interface hasId {
+    _id:any;
+    version:any;
+    [ key : string] : any;
+};
+
+
+
+export class apiFactory <T extends mongoose.Document ,m extends t,h extends hasId> {
     private publisherCreated: Publisher<h> | undefined =undefined;
     private publisherUpdated: Publisher<h> | undefined =undefined;
     private publisherDeleted: Publisher<h> | undefined =undefined;
@@ -54,12 +62,12 @@ export class apiFactory <T,m extends t,h> {
         res.status(200).json({data});
     };
     async createOne(req:Request,res:Response,next:NextFunction){
-        let data=await this.model.create( req.body ) as h;
+        let data=await this.model.create( req.body );
         if(!data){
             return next(new apiError('doc not found',400));
         };
         if(this.publisherCreated){
-            this.publisherCreated.publish(data);
+            this.publisherCreated.publish(data as h);
         };
         res.status(200).json({data});
     };
@@ -69,17 +77,20 @@ export class apiFactory <T,m extends t,h> {
             return next(new apiError('doc not found',400));
         };
         if(this.publisherUpdated){
-            this.publisherUpdated.publish(data);
+            const emitted={ _id:data._id , version:data.version , ... req.body } as h ;
+            await this.publisherUpdated.publish(emitted) ;
         };
         res.status(200).json({data});
     };
     async deleteOne(req:Request<{id:string},{},{},t>,res:Response,next:NextFunction){
-        let data=await this.model.findByIdAndDelete(req.params.id) as h;
+        let data=await this.model.findById(req.params.id) as T ;
         if(!data){
             return next(new apiError('doc not found',400));
         };
+        await data.deleteOne()
         if(this.publisherDeleted){
-            this.publisherDeleted.publish(data) ;
+            const emitted={ _id:data._id , version:data.version } as h;
+            await this.publisherDeleted.publish(emitted) ;
         };
         res.status(200).json({sttus:"Deleted"});
     };
@@ -88,7 +99,7 @@ export class apiFactory <T,m extends t,h> {
         if(req.filterObj){
             filterObj=req.filterObj;
         };
-        const {paginationObj,query}=await new apiFeatures< T , m >( this.model.find() , req.query  )
+        const {paginationObj,query}=await new apiFeatures< T  , m >( this.model.find() , req.query  )
             .filter(filterObj)
             .sort().select()
             .pagination();

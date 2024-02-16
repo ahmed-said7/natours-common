@@ -22,7 +22,7 @@
 /// <reference types="mongoose/types/validation" />
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
-import { Model } from "mongoose";
+import mongoose, { Model } from "mongoose";
 export interface Pobulate {
     path: string;
     select: string;
@@ -49,7 +49,12 @@ export interface Publisher<d> {
     publish(data: d): void;
     channelName: subjectType;
 }
-export declare class apiFactory<T, m extends t, h> {
+export interface hasId {
+    _id: any;
+    version: any;
+    [key: string]: any;
+}
+export declare class apiFactory<T extends mongoose.Document, m extends t, h extends hasId> {
     model: Model<T>;
     options?: Pobulate | undefined;
     private publisherCreated;
