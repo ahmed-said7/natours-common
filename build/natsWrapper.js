@@ -48,7 +48,13 @@ function WrapperInstance(clusterId, clientId, url) {
         }
         ;
         static Instance(clusterId, clientId, url) {
-            const WrapperModel = new Wrapper().connect(clusterId, clientId, url);
+            const WrapperModel = new Wrapper();
+            WrapperModel.connect(clusterId, clientId, url)
+                .then(() => { console.log('connection fullfilled'); })
+                .catch((e) => {
+                console.log(e);
+                throw e;
+            });
             return WrapperModel;
         }
         ;

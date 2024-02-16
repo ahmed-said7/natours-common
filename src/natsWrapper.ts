@@ -2,7 +2,7 @@ import * as nats from "node-nats-streaming";
 import { Stan } from "node-nats-streaming";
 export function WrapperInstance(clusterId:string,clientId:string,url:string){
 class Wrapper {
-    private _client: Stan|null =null;
+    public _client: Stan|null =null;
     constructor(){};
     get client(){
         if(!this._client){
@@ -18,7 +18,13 @@ class Wrapper {
         } );
     };
     static Instance(clusterId:string,clientId:string,url:string){
-        const WrapperModel=new Wrapper().connect(clusterId,clientId,url);
+        const WrapperModel=new Wrapper();
+        WrapperModel.connect(clusterId,clientId,url)
+        .then( () => { console.log('connection fullfilled') } )
+        .catch( (e) =>{
+            console.log(e);
+            throw e;
+        });
         return WrapperModel;
     };
 };
