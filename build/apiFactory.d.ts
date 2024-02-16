@@ -49,11 +49,11 @@ export interface Publisher<d> {
     publish(data: d): void;
     channelName: subjectType;
 }
-export declare class apiFactory<T, m extends t> {
+export declare class apiFactory<T, m extends t, h> {
     model: Model<T>;
     options: Pobulate | null;
     private publisherInstance;
-    constructor(model: Model<T>, options: Pobulate | null, publish: Publisher<T> | null);
+    constructor(model: Model<T>, options: Pobulate | null, publish: Publisher<h> | null);
     getOne(req: Request<{
         id: string;
     }, {}, {}, {}>, res: Response, next: NextFunction): Promise<void>;

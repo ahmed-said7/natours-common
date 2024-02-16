@@ -31,9 +31,9 @@ export interface Publisher<d> {
 };
 
 
-export class apiFactory <T,m extends t> {
-    private publisherInstance: Publisher<T> | null =null;
-    constructor( public model:Model<T> , public options: Pobulate | null , publish: Publisher<T> | null ){
+export class apiFactory <T,m extends t,h> {
+    private publisherInstance: Publisher<h> | null =null;
+    constructor( public model:Model<T> , public options: Pobulate | null , publish: Publisher<h> | null ){
         this.publisherInstance=publish;
     };
     
@@ -49,7 +49,7 @@ export class apiFactory <T,m extends t> {
         res.status(200).json({data});
     };
     async createOne(req:Request,res:Response,next:NextFunction){
-        let data=await this.model.create( req.body ) as T;
+        let data=await this.model.create( req.body ) as h;
         if(!data){
             return next(new apiError('doc not found',400));
         };
@@ -59,7 +59,7 @@ export class apiFactory <T,m extends t> {
         res.status(200).json({data});
     };
     async updateOne(req:Request<{id:string},{},{},{}>,res:Response,next:NextFunction){
-        let data=await this.model.findByIdAndUpdate( req.params.id , req.body , {new:true} );
+        let data=await this.model.findByIdAndUpdate( req.params.id , req.body , {new:true} ) as h;
         if(!data){
             return next(new apiError('doc not found',400));
         };
@@ -69,12 +69,12 @@ export class apiFactory <T,m extends t> {
         res.status(200).json({data});
     };
     async deleteOne(req:Request<{id:string},{},{},t>,res:Response,next:NextFunction){
-        let data=await this.model.findByIdAndDelete(req.params.id);
+        let data=await this.model.findByIdAndDelete(req.params.id) as h;
         if(!data){
             return next(new apiError('doc not found',400));
         };
         if(this.publisherInstance){
-            this.publisherInstance.publish(data);
+            this.publisherInstance.publish(data) ;
         };
         res.status(200).json({sttus:"Deleted"});
     };
