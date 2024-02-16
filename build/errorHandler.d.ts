@@ -25,7 +25,7 @@
 import { NextFunction, Request, Response } from "express";
 import { apiError } from "./apiError";
 import mongoose, { CastError } from "mongoose";
-interface MongoError {
+export interface MongoError {
     driver?: boolean;
     code?: number;
     name?: string;

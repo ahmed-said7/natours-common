@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { apiError } from "./apiError";
 import mongoose,{ CastError } from "mongoose";
 
-interface MongoError {
+export interface MongoError {
     driver?:boolean;
     code?:number;  
     name?:string;
@@ -45,7 +45,7 @@ export enum environment {
     production="production"
 };
 
-export const errorHandler=(env:environment) => function( error:erType,req:Request,res:Response,next:NextFunction ){
+export const errorHandler= (env:environment)=>( error:erType,req:Request,res:Response,next:NextFunction )=>{
         if( env === 'development'){
             return sendErrorDev(error, res);
         }

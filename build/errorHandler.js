@@ -31,7 +31,7 @@ var environment;
     environment["production"] = "production";
 })(environment || (exports.environment = environment = {}));
 ;
-const errorHandler = (env) => function (error, req, res, next) {
+const errorHandler = (env) => (error, req, res, next) => {
     if (env === 'development') {
         return sendErrorDev(error, res);
     }
