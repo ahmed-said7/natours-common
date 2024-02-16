@@ -9,4 +9,4 @@ export * from "./enums";
 export * from "./listener";
 export * from "./publisher";
 export * from "./image";
-export * from "./natsWrapper"
+export * from "./natsWrapper";
