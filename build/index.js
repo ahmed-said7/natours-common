@@ -24,3 +24,5 @@ __exportStar(require("./validationHandler"), exports);
 __exportStar(require("./enums"), exports);
 __exportStar(require("./listener"), exports);
 __exportStar(require("./publisher"), exports);
+__exportStar(require("./image"), exports);
+__exportStar(require("./natsWrapper"), exports);

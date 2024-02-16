@@ -8,4 +8,6 @@ export * from "./validationHandler";
 export * from "./enums";
 export * from "./listener";
 export * from "./publisher";
+export * from "./image";
+export * from "./natsWrapper";
 //# sourceMappingURL=index.d.ts.map
