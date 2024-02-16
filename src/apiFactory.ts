@@ -32,8 +32,8 @@ export interface Publisher<d> {
 
 
 export interface hasId {
-    _id:any;
-    version:any;
+    _id?:any;
+    version?:any;
     [ key : string] : any;
 };
 

@@ -50,8 +50,8 @@ export interface Publisher<d> {
     channelName: subjectType;
 }
 export interface hasId {
-    _id: any;
-    version: any;
+    _id?: any;
+    version?: any;
     [key: string]: any;
 }
 export declare class apiFactory<T extends mongoose.Document, m extends t, h extends hasId> {
