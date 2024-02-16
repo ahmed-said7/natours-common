@@ -6,7 +6,7 @@ import asyncHandler from "express-async-handler";
 import { apiError } from "./apiError";
 
 
-export function uploadImage(){
+function uploadImage(){
     const storage=multer.memoryStorage();
     const fileFilter=function(req:Request,file:Express.Multer.File,cb:FileFilterCallback){
         if(file.mimetype.startsWith('image/')){

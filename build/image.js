@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resizeMultipleImages = exports.resizeSingleImage = exports.uploadMultipleImages = exports.uploadSingleImage = exports.uploadImage = void 0;
+exports.resizeMultipleImages = exports.resizeSingleImage = exports.uploadMultipleImages = exports.uploadSingleImage = void 0;
 const multer_1 = __importDefault(require("multer"));
 const uuid_1 = __importDefault(require("uuid"));
 const sharp_1 = __importDefault(require("sharp"));
@@ -32,7 +32,6 @@ function uploadImage() {
     };
     return (0, multer_1.default)({ storage, fileFilter });
 }
-exports.uploadImage = uploadImage;
 ;
 function uploadSingleImage(field) {
     return uploadImage().single(field);
