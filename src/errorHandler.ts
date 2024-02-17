@@ -26,7 +26,7 @@ const handleValidationError = ( err : mongoose.Error.ValidationError ) : apiErro
 };
 
 const sendErrorProd=( err: apiError | any , res:Response )=>{
-    if( err.isOperational ){
+    if( err.isOperational === true ){
         res.status(err.statusCode || 400 )
         .json({ mesage:err.message , status:err.status });
     } else {
@@ -36,7 +36,7 @@ const sendErrorProd=( err: apiError | any , res:Response )=>{
 };
 
 const sendErrorDev=( err: erType , res:Response )=>{
-    return res.status(400).json({ err : err })
+    return res.status(400).json({ err : err.mesage  })
 };
 
 
@@ -46,6 +46,7 @@ export enum environment {
 };
 
 export const errorHandler= (env:environment)=>( error:erType,req:Request,res:Response,next:NextFunction )=>{
+        console.log(error);
         if( env === 'development'){
             return sendErrorDev(error, res);
         }

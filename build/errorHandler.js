@@ -12,7 +12,7 @@ const handleValidationError = (err) => {
     return new apiError_1.apiError(`Validation errors: ${values} `, 400);
 };
 const sendErrorProd = (err, res) => {
-    if (err.isOperational) {
+    if (err.isOperational === true) {
         res.status(err.statusCode || 400)
             .json({ mesage: err.message, status: err.status });
     }
@@ -23,7 +23,7 @@ const sendErrorProd = (err, res) => {
     ;
 };
 const sendErrorDev = (err, res) => {
-    return res.status(400).json({ err: err });
+    return res.status(400).json({ err: err.mesage });
 };
 var environment;
 (function (environment) {
@@ -32,6 +32,7 @@ var environment;
 })(environment || (exports.environment = environment = {}));
 ;
 const errorHandler = (env) => (error, req, res, next) => {
+    console.log(error);
     if (env === 'development') {
         return sendErrorDev(error, res);
     }
