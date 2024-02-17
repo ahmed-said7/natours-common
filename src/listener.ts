@@ -27,7 +27,7 @@ export abstract class listener<T extends l> {
     listen(){
         const self=this;
         const subscribtion=this.client.subscribe(this.channelName,this.queueGroupName,this.options());
-        subscribtion.on('mesage',function(msg:Message){
+        subscribtion.on('message',function(msg:Message){
             const data=self.parseMessage(msg);
             self.onEvent(data,msg);
         });

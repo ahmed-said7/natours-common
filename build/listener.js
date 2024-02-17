@@ -25,7 +25,7 @@ class listener {
     listen() {
         const self = this;
         const subscribtion = this.client.subscribe(this.channelName, this.queueGroupName, this.options());
-        subscribtion.on('mesage', function (msg) {
+        subscribtion.on('message', function (msg) {
             const data = self.parseMessage(msg);
             self.onEvent(data, msg);
         });
