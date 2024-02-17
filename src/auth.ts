@@ -59,7 +59,8 @@ asyncHandler( async (req:Request,res:Response,next:NextFunction) =>{
 });
 
 export const allowedTo=( ...roles : string[]  )=>(req:Request,res:Response,next:NextFunction)=>{
-    if(roles.includes(req.user.role)){
+    if(! roles.includes(req.user.role )){
         return next(new apiError('you are not allowed to access route',400))
     };
+    return next();
 };

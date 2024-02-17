@@ -50,9 +50,10 @@ exports.protect = (0, express_async_handler_1.default)((req, res, next) => __awa
     return next();
 }));
 const allowedTo = (...roles) => (req, res, next) => {
-    if (roles.includes(req.user.role)) {
+    if (!roles.includes(req.user.role)) {
         return next(new apiError_1.apiError('you are not allowed to access route', 400));
     }
     ;
+    return next();
 };
 exports.allowedTo = allowedTo;
