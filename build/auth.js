@@ -59,7 +59,7 @@ exports.protect = (0, express_async_handler_1.default)((req, res, next) => __awa
         _id: decoded._id
     };
     if (user.passwordChangedAt) {
-        const timestamp = user.passwordChangedAt.getTime() / 1000;
+        const timestamp = ((new Date(user.passwordChangedAt)).getTime()) / 1000;
         if (timestamp > decoded.iat) {
             return next(new apiError_1.apiError('login again ', 400));
         }

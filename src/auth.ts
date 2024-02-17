@@ -47,7 +47,7 @@ asyncHandler( async (req:Request,res:Response,next:NextFunction) =>{
                 _id:decoded._id
             };
     if(user.passwordChangedAt){
-        const timestamp=user.passwordChangedAt.getTime() / 1000;
+        const timestamp=  ( (new Date(user.passwordChangedAt)).getTime() ) / 1000;
         if( timestamp > decoded.iat! ){
             return next(new apiError('login again ',400));
         };
