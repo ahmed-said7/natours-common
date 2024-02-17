@@ -2,6 +2,7 @@ import jwt,{JwtPayload} from 'jsonwebtoken';
 import { Request,Response,NextFunction } from 'express';
 import asyncHandler from "express-async-handler";
 import { apiError } from './apiError';
+import {promisify } from "util"
 declare global{
     namespace Express {
         interface Request {
@@ -37,7 +38,7 @@ asyncHandler( async (req:Request,res:Response,next:NextFunction) =>{
     if( ! token ){
         return next(new apiError('token not found',400));
     };
-    const decoded=jwt.verify(token,process.env.jwt_secret!) as payload;
+    const decoded=jwt.verify(token,process.env.jwt_secret!) as JwtPayload;
     const user=
             {  
                 email:decoded.email , password:decoded.password , role:decoded.role,
