@@ -25,18 +25,25 @@ const handleValidationError = ( err : mongoose.Error.ValidationError ) : apiErro
     return new apiError(`Validation errors: ${values} `,400);
 };
 
-const sendErrorProd=( err: apiError | any , res:Response )=>{
-    if( err.isOperational === true ){
-        res.status(err.statusCode || 400 )
+const sendErrorProd=( err: any , res:Response )=>{
+    if( err.isOperational ){
+        return res.status(err.statusCode)
         .json({ mesage:err.message , status:err.status });
     } else {
-        res.status(500)
+        return res.status(500)
         .json({ mesage:'something went wrong ',status:'failed' });
     };
 };
 
-const sendErrorDev=( err: erType , res:Response )=>{
-    return res.status(400).json({ err : err.mesage  })
+const sendErrorDev=( err: any , res:Response )=>{
+    err.statusCode=err.statusCode || 400;
+    err.status = err.status || 'error';
+    return res.status(err.statusCode).json({
+        status: err.status,
+        error: err,
+        message: err.message,
+        stack: err.stack
+    });
 };
 
 
@@ -45,20 +52,21 @@ export enum environment {
     production="production"
 };
 
-export const errorHandler= (env:environment)=>( error:erType,req:Request,res:Response,next:NextFunction )=>{
+export const errorHandler= (env:environment)=>( error:any,req:Request,res:Response,next:NextFunction )=>{
         console.log(error);
         if( env === 'development'){
             return sendErrorDev(error, res);
         }
         let objErr={ ... error };
-        if( (objErr as CastError ).name === 'CastError' ){
-            objErr=new apiError(`invalid mongoId value ${(error as CastError).value}`,400);
+        if(objErr.name === 'CastError' ){
+            objErr=new apiError(`invalid mongoId value ${(objErr as CastError).value}`,400);
         };
-        if( (objErr as MongoError).code === 11000  ){
-            objErr=handleDuplicateError( error as MongoError );
+        
+        if( objErr.code === 11000  ){
+            objErr=handleDuplicateError( objErr );
         };
-        if( (objErr as mongoose.Error.ValidationError ).name === 'ValidationError'){
-            objErr=handleValidationError( error as mongoose.Error.ValidationError );
+        if( objErr.name === 'ValidationError'){
+            objErr=handleValidationError( objErr);
         };
-        sendErrorProd(objErr , res);
+        return sendErrorProd(objErr , res);
 };

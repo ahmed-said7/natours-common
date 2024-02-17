@@ -12,18 +12,25 @@ const handleValidationError = (err) => {
     return new apiError_1.apiError(`Validation errors: ${values} `, 400);
 };
 const sendErrorProd = (err, res) => {
-    if (err.isOperational === true) {
-        res.status(err.statusCode || 400)
+    if (err.isOperational) {
+        return res.status(err.statusCode)
             .json({ mesage: err.message, status: err.status });
     }
     else {
-        res.status(500)
+        return res.status(500)
             .json({ mesage: 'something went wrong ', status: 'failed' });
     }
     ;
 };
 const sendErrorDev = (err, res) => {
-    return res.status(400).json({ err: err.mesage });
+    err.statusCode = err.statusCode || 400;
+    err.status = err.status || 'error';
+    return res.status(err.statusCode).json({
+        status: err.status,
+        error: err,
+        message: err.message,
+        stack: err.stack
+    });
 };
 var environment;
 (function (environment) {
@@ -38,17 +45,17 @@ const errorHandler = (env) => (error, req, res, next) => {
     }
     let objErr = Object.assign({}, error);
     if (objErr.name === 'CastError') {
-        objErr = new apiError_1.apiError(`invalid mongoId value ${error.value}`, 400);
+        objErr = new apiError_1.apiError(`invalid mongoId value ${objErr.value}`, 400);
     }
     ;
     if (objErr.code === 11000) {
-        objErr = handleDuplicateError(error);
+        objErr = handleDuplicateError(objErr);
     }
     ;
     if (objErr.name === 'ValidationError') {
-        objErr = handleValidationError(error);
+        objErr = handleValidationError(objErr);
     }
     ;
-    sendErrorProd(objErr, res);
+    return sendErrorProd(objErr, res);
 };
 exports.errorHandler = errorHandler;

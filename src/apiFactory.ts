@@ -16,7 +16,7 @@ import { Request , Response , NextFunction } from "express";
 import { apiError } from "./apiError";
 import { apiFeatures } from "./apiFeatures";
 import { subjectType } from "./enums";
-
+// mongoose.Document.
 declare global{
     namespace Express {
         interface Request {
@@ -39,7 +39,7 @@ export interface hasId {
 
 
 
-export class apiFactory <T extends mongoose.Document ,m extends t,h extends hasId> {
+export class apiFactory <T extends mongoose.Document,m extends t,h extends hasId> {
     private publisherCreated: Publisher<h> | undefined =undefined;
     private publisherUpdated: Publisher<h> | undefined =undefined;
     private publisherDeleted: Publisher<h> | undefined =undefined;
@@ -72,10 +72,14 @@ export class apiFactory <T extends mongoose.Document ,m extends t,h extends hasI
         res.status(200).json({data});
     };
     async updateOne(req:Request<{id:string},{},{},{}>,res:Response,next:NextFunction){
-        let data=await this.model.findByIdAndUpdate( req.params.id , req.body , {new:true} ) as h;
+        let data=await this.model.findByIdAndUpdate( req.params.id , req.body , {new:true} ) as T;
         if(!data){
             return next(new apiError('doc not found',400));
         };
+        if(data.version){
+            data.version +=1;
+        };
+        await data.save();
         if(this.publisherUpdated){
             const emitted={ _id:data._id , version:data.version , ... req.body } as h ;
             await this.publisherUpdated.publish(emitted) ;
@@ -83,10 +87,14 @@ export class apiFactory <T extends mongoose.Document ,m extends t,h extends hasI
         res.status(200).json({data});
     };
     async deleteOne(req:Request<{id:string},{},{},t>,res:Response,next:NextFunction){
-        let data=await this.model.findById(req.params.id) as T ;
+        let data=await this.model.findById(req.params.id);
         if(!data){
             return next(new apiError('doc not found',400));
         };
+        if(data.version){
+            data.version +=1;
+        };
+        await data.save();
         await data.deleteOne()
         if(this.publisherDeleted){
             const emitted={ _id:data._id , version:data.version } as h;
