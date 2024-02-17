@@ -69,11 +69,11 @@ class apiFactory {
                 return next(new apiError_1.apiError('doc not found', 400));
             }
             ;
-            if (data.version) {
+            if (data.version || data.version === 0) {
                 data.version += 1;
+                yield data.save();
             }
             ;
-            yield data.save();
             if (this.publisherUpdated) {
                 const emitted = Object.assign({ _id: data._id, version: data.version }, req.body);
                 yield this.publisherUpdated.publish(emitted);
@@ -90,11 +90,11 @@ class apiFactory {
                 return next(new apiError_1.apiError('doc not found', 400));
             }
             ;
-            if (data.version) {
+            if (data.version || data.version === 0) {
                 data.version += 1;
+                yield data.save();
             }
             ;
-            yield data.save();
             yield data.deleteOne();
             if (this.publisherDeleted) {
                 const emitted = { _id: data._id, version: data.version };

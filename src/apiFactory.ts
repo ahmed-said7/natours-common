@@ -76,12 +76,12 @@ export class apiFactory <T extends mongoose.Document,m extends t,h extends hasId
         if(!data){
             return next(new apiError('doc not found',400));
         };
-        if(data.version){
+        if(data.version || data.version === 0){
             data.version +=1;
+            await data.save();
         };
-        await data.save();
         if(this.publisherUpdated){
-            const emitted={ _id:data._id , version:data.version , ... req.body } as h ;
+            const emitted={ _id:data._id , version:data.version , ... req.body } as h;
             await this.publisherUpdated.publish(emitted) ;
         };
         res.status(200).json({data});
@@ -91,10 +91,10 @@ export class apiFactory <T extends mongoose.Document,m extends t,h extends hasId
         if(!data){
             return next(new apiError('doc not found',400));
         };
-        if(data.version){
+        if(data.version || data.version === 0){
             data.version +=1;
+            await data.save();
         };
-        await data.save();
         await data.deleteOne()
         if(this.publisherDeleted){
             const emitted={ _id:data._id , version:data.version } as h;
