@@ -34,6 +34,20 @@ export interface t {
     limit?: string;
     keyword?: string;
 }
+declare global {
+    namespace Express {
+        interface Request {
+            user: {
+                _id: string;
+                email: string;
+                password: string;
+                role: string;
+                passwordChangedAt: Date;
+                active: boolean;
+            };
+        }
+    }
+}
 import { Request, Response, NextFunction } from "express";
 import { subjectType } from "./enums";
 declare global {
@@ -54,13 +68,25 @@ export interface hasId {
     version?: any;
     [key: string]: any;
 }
+interface k extends mongoose.Document {
+    _id?: mongoose.Types.ObjectId;
+    version?: number;
+    passwordChangedAt?: Date;
+    active?: boolean;
+    [key: string]: any;
+}
 export declare class apiFactory<T extends mongoose.Document, m extends t, h extends hasId> {
     model: Model<T>;
+    auth?: mongoose.Model<k, {}, {}, {}, mongoose.Document<unknown, {}, k> & k & Required<{
+        _id: mongoose.Types.ObjectId;
+    }>, any> | undefined;
     options?: Pobulate | undefined;
     private publisherCreated;
     private publisherUpdated;
     private publisherDeleted;
-    constructor(model: Model<T>, options?: Pobulate | undefined);
+    constructor(model: Model<T>, auth?: mongoose.Model<k, {}, {}, {}, mongoose.Document<unknown, {}, k> & k & Required<{
+        _id: mongoose.Types.ObjectId;
+    }>, any> | undefined, options?: Pobulate | undefined);
     setPublisher(publisherCreated?: Publisher<h>, publisherUpdated?: Publisher<h>, publisherDeleted?: Publisher<h>): void;
     getOne(req: Request<{
         id: string;
@@ -73,5 +99,8 @@ export declare class apiFactory<T extends mongoose.Document, m extends t, h exte
         id: string;
     }, {}, {}, t>, res: Response, next: NextFunction): Promise<void>;
     getAll(req: Request<{}, {}, {}, m>, res: Response, next: NextFunction): Promise<void>;
+    protect(req: Request, res: Response, next: NextFunction): Promise<void>;
 }
+export declare const allowedTo: (...roles: string[]) => (req: Request, res: Response, next: NextFunction) => void;
+export {};
 //# sourceMappingURL=apiFactory.d.ts.map

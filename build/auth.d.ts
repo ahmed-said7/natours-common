@@ -1,6 +1,6 @@
 /// <reference types="qs" />
+/// <reference types="express" />
 import { JwtPayload } from 'jsonwebtoken';
-import { Request, Response, NextFunction } from 'express';
 declare global {
     namespace Express {
         interface Request {
@@ -24,5 +24,4 @@ export interface payload extends JwtPayload {
     active: boolean;
 }
 export declare const protect: import("express").RequestHandler<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>>;
-export declare const allowedTo: (...roles: string[]) => (req: Request, res: Response, next: NextFunction) => void;
 //# sourceMappingURL=auth.d.ts.map

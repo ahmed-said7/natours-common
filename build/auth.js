@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.allowedTo = exports.protect = void 0;
+exports.protect = void 0;
 const jwt = __importStar(require("jsonwebtoken"));
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const apiError_1 = require("./apiError");
@@ -72,11 +72,3 @@ exports.protect = (0, express_async_handler_1.default)((req, res, next) => __awa
     req.user = user;
     return next();
 }));
-const allowedTo = (...roles) => (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
-        return next(new apiError_1.apiError('you are not allowed to access route', 400));
-    }
-    ;
-    return next();
-};
-exports.allowedTo = allowedTo;
