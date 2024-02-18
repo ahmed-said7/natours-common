@@ -42,7 +42,7 @@ class apiFeatures {
     select() {
         if (this.queryObj.select) {
             const select = this.queryObj.select.split(',').join(' ');
-            this.query = this.query.sort(select);
+            this.query = this.query.select(select);
         }
         ;
         return this;

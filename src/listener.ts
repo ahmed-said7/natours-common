@@ -8,9 +8,9 @@ export interface l {
 
 
 export abstract class listener<T extends l> {
-    abstract queueGroupName:string;
+    
     abstract channelName:T['subject'];
-    constructor(private _client:Stan){};
+    constructor(protected _client:Stan,protected queueGroupName:string){};
     get client(){
         if( ! this._client ){
             throw new Error('client not available');

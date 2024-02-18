@@ -3,8 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.listener = void 0;
 ;
 class listener {
-    constructor(_client) {
+    constructor(_client, queueGroupName) {
         this._client = _client;
+        this.queueGroupName = queueGroupName;
     }
     ;
     get client() {

@@ -8,5 +8,6 @@ export enum subjectType {
     bookingCreated="booking:created",
     userCreated="user:created",
     userUpdated="user:updated",
-    userDeleted="user:deleted"
+    userDeleted="user:deleted",
+    passwordChanged="password:changed"
 };

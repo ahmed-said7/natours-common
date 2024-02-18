@@ -13,5 +13,6 @@ var subjectType;
     subjectType["userCreated"] = "user:created";
     subjectType["userUpdated"] = "user:updated";
     subjectType["userDeleted"] = "user:deleted";
+    subjectType["passwordChanged"] = "password:changed";
 })(subjectType || (exports.subjectType = subjectType = {}));
 ;

@@ -5,10 +5,10 @@ export interface l {
     data: any;
 }
 export declare abstract class listener<T extends l> {
-    private _client;
-    abstract queueGroupName: string;
+    protected _client: Stan;
+    protected queueGroupName: string;
     abstract channelName: T['subject'];
-    constructor(_client: Stan);
+    constructor(_client: Stan, queueGroupName: string);
     get client(): Stan;
     options(): import("node-nats-streaming").SubscriptionOptions;
     listen(): void;
