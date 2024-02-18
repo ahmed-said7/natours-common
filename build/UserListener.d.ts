@@ -29,7 +29,7 @@ import { subjectType } from "./enums";
 interface userCreated {
     subject: subjectType;
     data: {
-        _id: mongoose.ObjectId;
+        _id: mongoose.Types.ObjectId;
         name?: string;
         email?: string;
         role?: string;

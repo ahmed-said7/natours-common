@@ -4,7 +4,6 @@ import { subjectType } from "./enums";
 import { listener } from "./listener";
 
 interface t extends mongoose.Document {
-    _id:mongoose.Types.ObjectId;
     name?: string;
     duration?: number;
     maxGroupSize?: number;
